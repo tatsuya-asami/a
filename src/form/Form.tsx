@@ -1,58 +1,65 @@
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { SubValue } from "./SubValue";
+import {
+  FormProvider,
+  useFieldArray,
+  useForm,
+  useWatch,
+} from "react-hook-form";
 import { useState } from "react";
+import { Descriptions } from "./Descriptions";
 
 export const Form = () => {
-  const [openSubValueIndex, setOpenSubValueIndex] = useState<number | null>(
-    null
-  );
+  const [editingUid, setEditingUid] = useState<number | null>(null);
   const methods = useForm<FormValues>({
     defaultValues,
   });
-  const { register, control, handleSubmit } = methods;
-  const { fields, append, remove } = useFieldArray({
+  const { control, handleSubmit } = methods;
+  const { fields, remove } = useFieldArray({
     control,
-    name: "myList",
+    name: "userList",
   });
-
+  const watchedMyList = useWatch({ control, name: "userList" });
+  console.log(watchedMyList);
   return (
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit((data) => {
-          console.log(data);
+          console.log(data.userList);
         })}
       >
         {fields.map((field, index) => {
           return (
             <div key={field.id}>
-              <input {...register(`myList.${index}.main`)} />
+              <span>
+                {field.uid}: {field.name}
+              </span>
               <button type="button" onClick={() => remove(index)}>
                 remove
               </button>
-              <button onClick={() => setOpenSubValueIndex(index)}>
-                open sub input
-              </button>
-              {openSubValueIndex === index && <SubValue index={index} />}
+              <button onClick={() => setEditingUid(field.uid)}>edit</button>
             </div>
           );
         })}
         <div>
-          <button type="button" onClick={() => append(defaultMyList)}>
-            append
-          </button>
-        </div>
-        <div>
           <button type="submit">Submit</button>
         </div>
+        {editingUid && <Descriptions editingUid={editingUid} />}
       </form>
     </FormProvider>
   );
 };
 
-const defaultMyList = { main: "" };
-const defaultValues: FormValues = {
-  myList: [defaultMyList],
-};
+type UserParams = { uid: number; name: string; description?: string };
+
 export type FormValues = {
-  myList: { main: string; sub?: string }[];
+  userList: UserParams[];
+};
+
+const userList: UserParams[] = [
+  { uid: 1, name: "user1" },
+  { uid: 2, name: "user2" },
+  { uid: 3, name: "user3" },
+];
+
+const defaultValues: FormValues = {
+  userList,
 };
