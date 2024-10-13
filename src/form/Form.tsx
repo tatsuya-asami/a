@@ -18,7 +18,7 @@ export const Form = () => {
     name: "userList",
   });
   const watchedMyList = useWatch({ control, name: "userList" });
-  console.log(watchedMyList);
+
   return (
     <FormProvider {...methods}>
       <form
@@ -33,7 +33,7 @@ export const Form = () => {
                 {field.uid}: {field.name}
               </span>
               <button type="button" onClick={() => remove(index)}>
-                remove
+                remove by remove
               </button>
               <button
                 type="button"
@@ -55,6 +55,15 @@ export const Form = () => {
         </div>
         {editingUid && <Descriptions editingUid={editingUid} />}
       </form>
+      <ul>
+        {watchedMyList.map((user) => {
+          return (
+            <li key={user.uid}>
+              {user.uid}: {user.name} {user.description}
+            </li>
+          );
+        })}
+      </ul>
     </FormProvider>
   );
 };
