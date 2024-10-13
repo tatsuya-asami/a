@@ -12,7 +12,7 @@ export const Form = () => {
   const methods = useForm<FormValues>({
     defaultValues,
   });
-  const { control, handleSubmit } = methods;
+  const { control, handleSubmit, getValues, setValue } = methods;
   const { fields, remove } = useFieldArray({
     control,
     name: "userList",
@@ -34,6 +34,17 @@ export const Form = () => {
               </span>
               <button type="button" onClick={() => remove(index)}>
                 remove
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setValue(
+                    "userList",
+                    getValues("userList").filter((_, i) => i !== index)
+                  );
+                }}
+              >
+                remove by setValue
               </button>
               <button onClick={() => setEditingUid(field.uid)}>edit</button>
             </div>
