@@ -26,30 +26,32 @@ export const Form = () => {
           console.log(data.userList);
         })}
       >
-        {fields.map((field, index) => {
-          return (
-            <div key={field.id}>
-              <span>
-                {field.uid}: {field.name}
-              </span>
-              <button type="button" onClick={() => remove(index)}>
-                remove by remove
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setValue(
-                    "userList",
-                    getValues("userList").filter((_, i) => i !== index)
-                  );
-                }}
-              >
-                remove by setValue
-              </button>
-              <button onClick={() => setEditingUid(field.uid)}>edit</button>
-            </div>
-          );
-        })}
+        <ul>
+          {fields.map((field, index) => {
+            return (
+              <li key={field.id}>
+                <span>
+                  {field.uid}: {field.name}
+                </span>
+                <button type="button" onClick={() => remove(index)}>
+                  remove by remove
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setValue(
+                      "userList",
+                      getValues("userList").filter((_, i) => i !== index)
+                    );
+                  }}
+                >
+                  remove by setValue
+                </button>
+                <button onClick={() => setEditingUid(field.uid)}>edit</button>
+              </li>
+            );
+          })}
+        </ul>
         <div>
           <button type="submit">Submit</button>
         </div>
